@@ -1,7 +1,6 @@
 import { AverageStatus, NotesData } from './ReturnApprovalStatusDTO';
-
 class ReturnApprovalStatus {
-  public execute(notesData: NotesData): string | number | any {
+  public execute(notesData: NotesData): AverageStatus {
     let averageStatus = {} as AverageStatus;
 
     const average = (notesData.note1 + notesData.note2 + notesData.note3) / 3;
