@@ -1,2 +1,5 @@
-api1/node_modules
-api2/node_modules
+Student/node_modules
+Students Average/node_modules
+
+Student/.env
+Students Average/.env
