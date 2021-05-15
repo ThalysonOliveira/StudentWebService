@@ -2,7 +2,13 @@ import { Router } from 'express';
 import HttpResponse from '../errors/HttpResponse';
 import Log from 'node-color-log';
 import Student from '../models/Student';
-import CreateStudentService from '../services/CreateStudentService';
+import CreateStudentService from '../services/CreateStudent/CreateStudentService';
+import FilterStudentsService from '../services/FitlerStudent/FilterStudentsService';
+import {
+  Notes,
+  Status,
+  StudentByAge,
+} from '../services/FitlerStudent/FilterStudentsServiceDTO';
 
 const studentRouter = Router();
 
@@ -21,15 +27,20 @@ studentRouter.get('/students', async (request, response) => {
   }
 });
 
-studentRouter.get('/students/:status/status', async (request, response) => {
-  const { status } = request.params;
+studentRouter.get('/students/status', async (request, response) => {
+  const { status } = request.query as Status;
   try {
-    const students = await Student.find({ status });
+    if (!status)
+      return HttpResponse.BadRequest(
+        response,
+        'Adicione ?status={Aprovado/Reprovado} no endpoint',
+      );
 
+    const statusStudent = await FilterStudentsService.Status(status);
     return HttpResponse.Ok(
       response,
       `Todos os alunos ${status}s listados com sucesso.`,
-      students,
+      statusStudent,
     );
   } catch (error) {
     Log.error(error.message, error.stack);
@@ -37,15 +48,22 @@ studentRouter.get('/students/:status/status', async (request, response) => {
   }
 });
 
-studentRouter.get('/students/:age/age', async (request, response) => {
-  const { age } = request.params;
+studentRouter.get('/students/age', async (request, response) => {
+  const { age, type } = request.query as StudentByAge;
   try {
-    const students = await Student.find({ age });
+    const studentsAge = await FilterStudentsService.Age(age, type);
+
+    if (age && !type)
+      return HttpResponse.Ok(
+        response,
+        `Todos os alunos com a idade de ${age} anos listados com sucesso.`,
+        studentsAge,
+      );
 
     return HttpResponse.Ok(
       response,
-      `Todos os alunos com a idade de ${age} anos listados com sucesso.`,
-      students,
+      `Todos os alunos com a idade ${type} ou igual a ${age} listados com sucesso.`,
+      studentsAge,
     );
   } catch (error) {
     Log.error(error.message, error.stack);
@@ -53,25 +71,21 @@ studentRouter.get('/students/:age/age', async (request, response) => {
   }
 });
 
-studentRouter.get(
-  '/students/:note1/note1/:note2/note2/:note3/note3',
-  async (request, response) => {
-    const { note1, note2, note3 } = request.params;
+studentRouter.get('/students/notes', async (request, response) => {
+  const { startNote, endNote } = request.query as Notes;
+  try {
+    const studentsNote = await FilterStudentsService.Notes(startNote, endNote);
 
-    try {
-      const students = await Student.find({ note1, note2, note3 });
-
-      return HttpResponse.Ok(
-        response,
-        `Todos os alunos com as notas ${note1},${note2},${note3} listados com sucesso.`,
-        students,
-      );
-    } catch (error) {
-      Log.error(error.message, error.stack);
-      return HttpResponse.GetError(response, error);
-    }
-  },
-);
+    return HttpResponse.Ok(
+      response,
+      `Todos os alunos com os intervalos de notas entre ${startNote} e ${endNote} listados com sucesso.`,
+      studentsNote,
+    );
+  } catch (error) {
+    Log.error(error.message, error.stack);
+    return HttpResponse.GetError(response, error);
+  }
+});
 
 studentRouter.post('/students', async (request, response) => {
   const studentData = request.body.student;
