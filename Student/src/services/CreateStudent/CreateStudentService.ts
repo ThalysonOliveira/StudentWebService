@@ -1,6 +1,6 @@
-import StudentAverage from '../api/StudentAverage';
-import { BadRequestError } from '../errors/HttpErros';
-import Student from '../models/Student';
+import StudentAverage from '../../api/StudentAverage';
+import { BadRequestError } from '../../errors/HttpErros';
+import Student from '../../models/Student';
 import { StudentData, NotesData } from './CreateStudentServiceDTO';
 class CreateStudentService {
   public async execute(studentData: StudentData, notesData: NotesData) {
