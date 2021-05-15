@@ -1,18 +1,21 @@
-import Api1 from '../axios/index';
+import StudentAverage from '../api/StudentAverage';
+import { BadRequestError } from '../errors/HttpErros';
 import Student from '../models/Student';
-
-import { StudentData } from './CreateStudentServiceDTO';
-
+import { StudentData, NotesData } from './CreateStudentServiceDTO';
 class CreateStudentService {
-  public async execute(
-    studentData: StudentData,
-    notesData: string,
-  ): Promise<any> {
-    const { data } = await Api1.post('/student-status', notesData);
+  public async execute(studentData: StudentData, notesData: NotesData) {
+    const { data } = await StudentAverage.post('/student-status', notesData);
+
+    const studentExist = await Student.findOne({ email: studentData.email });
+
+    if (studentExist)
+      throw new BadRequestError(
+        `O email "${studentData.email}" já esta em uso`,
+      );
 
     const student = await Student.create({
       ...studentData,
-      notesData,
+      ...notesData,
       average: data.average,
       status: data.status,
     });
