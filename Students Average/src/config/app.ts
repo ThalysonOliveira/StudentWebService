@@ -15,7 +15,7 @@ class App {
   }
 
   routes() {
-    new Routes(this.app);
+    new Routes().RouteConfig(this.app);
   }
 }
 

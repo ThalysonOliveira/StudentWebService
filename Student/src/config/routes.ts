@@ -30,6 +30,6 @@ export default class Route {
       app.use(router.default);
     }
 
-    Log.info('🔀 Importação de rotas encerrada.');
+    Log.info('Importação de rotas encerrada.');
   }
 }

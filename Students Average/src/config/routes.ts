@@ -4,7 +4,7 @@ import { Express } from 'express';
 import Log from 'node-color-log';
 
 export default class Route {
-  constructor(app: Express) {
+  RouteConfig(app: Express): void {
     const pathRoutes = fs.existsSync(path.resolve(__dirname, '..', 'routes'));
 
     if (!pathRoutes) {
@@ -30,6 +30,6 @@ export default class Route {
       app.use(router.default);
     }
 
-    Log.info('🔀 Importação de rotas encerrada.');
+    Log.info('Importação de rotas encerrada.');
   }
 }
