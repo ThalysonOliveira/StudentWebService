@@ -1,0 +1,47 @@
+version: "3"
+
+volumes: 
+    student-volume:
+networks: 
+    student-network:
+        driver: bridge
+
+services:
+    student:
+        build: ./Student
+        ports: 
+            - "3366:3366"
+        command: npm start
+        networks: 
+            - student-network
+        environment: 
+            MONGODB_URI: mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}?authSource=admin
+    studentaverage:
+        build: ./Students Average
+        ports: 
+            - "3333:3333"
+        command: npm start
+        networks: 
+            - student-network
+    gateway:
+        build: ./Gateway
+        ports: 
+            - "3000:3000"
+        command: npm start
+        networks: 
+            - student-network
+    
+    mongodb: 
+        image: mongo      
+        env_file: 
+            - .env
+        ports: 
+            - ${DB_PORT}:27017
+        networks: 
+            - student-network
+        volumes:
+            - "student-volume:/data/db"
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+            MONGO_INITDB_ROOT_DATABASE: ${DB_NAME}
