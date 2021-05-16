@@ -12,7 +12,7 @@ import {
 
 const studentRouter = Router();
 
-studentRouter.get('/students', async (request, response) => {
+studentRouter.get('/', async (request, response) => {
   try {
     const students = await Student.find();
 
@@ -27,7 +27,7 @@ studentRouter.get('/students', async (request, response) => {
   }
 });
 
-studentRouter.get('/students/status', async (request, response) => {
+studentRouter.get('/status', async (request, response) => {
   const { status } = request.query as Status;
   try {
     if (!status)
@@ -48,7 +48,7 @@ studentRouter.get('/students/status', async (request, response) => {
   }
 });
 
-studentRouter.get('/students/age', async (request, response) => {
+studentRouter.get('/age', async (request, response) => {
   const { age, type } = request.query as StudentByAge;
   try {
     const studentsAge = await FilterStudentsService.Age(age, type);
@@ -71,7 +71,7 @@ studentRouter.get('/students/age', async (request, response) => {
   }
 });
 
-studentRouter.get('/students/notes', async (request, response) => {
+studentRouter.get('/notes', async (request, response) => {
   const { startNote, endNote } = request.query as Notes;
   try {
     const studentsNote = await FilterStudentsService.Notes(startNote, endNote);
@@ -87,7 +87,7 @@ studentRouter.get('/students/notes', async (request, response) => {
   }
 });
 
-studentRouter.post('/students', async (request, response) => {
+studentRouter.post('/', async (request, response) => {
   const studentData = request.body.student;
   const noteData = request.body.notes;
 
