@@ -15,7 +15,7 @@ app.get("/", (request, response) => {
   return response.send("OK");
 });
 
-app.use("/student-status", httpProxy("http://localhost:3333", { timeout: 3000 }));
-app.use("/students", httpProxy("http://localhost:3366", { timeout: 3000 }));
+app.use("/student-status", httpProxy("http://studentaverage:3333", { timeout: 3000 }));
+app.use("/students", httpProxy("http://student:3366", { timeout: 3000 }));
 
 app.listen(3000, () => Log.info("API student rodando"));
