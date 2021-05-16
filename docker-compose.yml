@@ -19,7 +19,7 @@ services:
     studentaverage:
         build: ./Students Average
         ports: 
-            - "3333:3333"
+            - "4000:4000"
         command: npm start
         networks: 
             - student-network
