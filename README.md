@@ -39,6 +39,7 @@ Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
 - Valores das variaveis de ambiente ao seu gosto
 - Inicie a aplicação:
   - Na pasta principal do projeto, rode o seguinte comando: `docker-compose up`
+- Acesse: `http://localhost:3000/`
 
 <a id="funcionalidades"></a>
 ## 🛠️ Funcionalidades
